@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Proof & Reviews | Uprise Data</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            purple: {
+              350: '#a855f7',
+              450: '#9333ea',
+              550: '#7e22ce',
+              650: '#6b21a8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    
+    .nav-tab {
+      cursor: pointer;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .nav-tab.active {
+      border-bottom: 3px solid #7e22ce;
+      color: #7e22ce;
+      font-weight: 600;
+    }
+    
+    .proof-step {
+      transition: all 0.3s ease;
+      border-left: 4px solid #a855f7;
+    }
+    
+    .proof-step:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(126, 34, 206, 0.2);
+    }
+    
+    .review-card {
+      transition: all 0.3s ease;
+      border-top: 4px solid transparent;
+    }
+    
+    .review-card:hover {
+      transform: translateY(-3px);
+      border-top: 4px solid #a855f7;
+      box-shadow: 0 10px 25px -5px rgba(126, 34, 206, 0.2);
+    }
+    
+    .star-rating {
+      color: #f59e0b;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background-color: #10b981;
+    }
+    
+    .notification.error {
+      background-color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="bg-white rounded-xl shadow-md p-4 mb-6 flex justify-between items-center">
+    <div class="flex items-center">
+      <i class="fas fa-sim-card text-purple-650 text-2xl mr-2"></i>
+      <h1 class="text-xl font-bold text-purple-650">Uprise Data</h1>
+    </div>
+    <nav>
+      <a href="index.html" class="bg-purple-650 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all">
+        <i class="fas fa-home mr-2"></i>Back to Home
+      </a>
+    </nav>
+  </header>
+
+  <!-- Notification -->
+  <div id="notification" class="notification hidden">
+    <i class="fas fa-check-circle mr-2"></i>
+    <span id="notification-text"></span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="card max-w-6xl mx-auto">
+    <!-- Tabs -->
+    <div class="flex border-b">
+      <div class="nav-tab active w-1/2" id="proof-tab">
+        <i class="fas fa-receipt mr-2"></i>Payment Proof
+      </div>
+      <div class="nav-tab w-1/2" id="reviews-tab">
+        <i class="fas fa-star mr-2"></i>Buyers Reviews
+      </div>
+    </div>
+    
+    <!-- Payment Proof Section -->
+    <div id="proof-section" class="p-8">
+      <h2 class="text-2xl font-bold text-purple-650 mb-6">How to Submit Payment Proof</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="proof-step bg-purple-50 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-650 text-white flex items-center justify-center mr-3">1</div>
+            <h3 class="text-lg font-semibold text-purple-650">Complete Your Transfer</h3>
+          </div>
+          <p class="text-purple-600">Transfer the exact amount to our bank account:</p>
+          <div class="bg-white p-4 rounded-lg mt-3 shadow-sm">
+            <p class="font-semibold">Bank: OPay</p>
+            <p class="font-semibold">Account: 8088277038</p>
+            <p class="font-semibold">Name: Margaret</p>
+          </div>
+        </div>
+        
+        <div class="proof-step bg-purple-50 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-650 text-white flex items-center justify-center mr-3">2</div>
+            <h3 class="text-lg font-semibold text-purple-650">Take a Screenshot</h3>
+          </div>
+          <p class="text-purple-600">Capture clear evidence of your successful transaction:</p>
+          <ul class="list-disc list-inside mt-2 text-purple-600">
+            <li>Transaction receipt</li>
+            <li>Bank app confirmation</li>
+            <li>SMS confirmation</li>
+          </ul>
+        </div>
+        
+        <div class="proof-step bg-purple-50 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-650 text-white flex items-center justify-center mr-3">3</div>
+            <h3 class="text-lg font-semibold text-purple-650">Submit Your Proof</h3>
+          </div>
+          <p class="text-purple-600">Upload your payment evidence through our system:</p>
+          <div class="mt-4">
+            <input type="file" class="w-full px-3 py-2 border border-purple-300 rounded-lg mb-3">
+            <textarea class="w-full px-3 py-2 border border-purple-300 rounded-lg" placeholder="Add any additional information" rows="3"></textarea>
+          </div>
+        </div>
+        
+        <div class="proof-step bg-purple-50 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 rounded-full bg-purple-650 text-white flex items-center justify-center mr-3">4</div>
+            <h3 class="text-lg font-semibold text-purple-650">Get Confirmation</h3>
+          </div>
+          <p class="text-purple-600">Once verified, your account will be credited within 5-15 minutes.</p>
+          <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mt-4">
+            <p class="text-yellow-700 text-sm flex items-center">
+              <i class="fas fa-info-circle mr-2"></i> 
+              Include your registered phone number in the description for faster processing
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-purple-650 text-white p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-3 flex items-center">
+          <i class="fas fa-shield-alt mr-2"></i> Why Payment Proof is Important
+        </h3>
+        <ul class="list-disc list-inside space-y-2">
+          <li>Helps us quickly identify your transaction among many</li>
+          <li>Speeds up the verification process</li>
+          <li>Ensures your account is credited correctly</li>
+          <li>Provides evidence in case of any disputes</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Reviews Section -->
+    <div id="reviews-section" class="p-8 hidden">
+      <h2 class="text-2xl font-bold text-purple-650 mb-6">What Our Customers Say</h2>
+      
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <div class="text-3xl font-bold text-purple-650">4.8</div>
+          <div class="star-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <div class="text-purple-600 text-sm">Based on 247 reviews</div>
+        </div>
+        
+        <div class="bg-purple-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-purple-650 mb-2">Share Your Experience</h3>
+          <button class="bg-purple-650 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-all">
+            <i class="fas fa-pen mr-1"></i> Write a Review
+          </button>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <!-- Review 1 -->
+        <div class="review-card bg-white p-6 rounded-lg shadow-sm border border-purple-100">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-semibold text-purple-650">Chinedu O.</h3>
+              <div class="star-rating text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+            <span class="text-sm text-purple-600">2 days ago</span>
+          </div>
+          <p class="text-purple-600">I was skeptical at first, but the data plan was delivered instantly after payment confirmation. Will definitely use again!</p>
+          <div class="mt-4 flex items-center text-sm text-purple-500">
+            <i class="fas fa-network-wired mr-2"></i> MTN 10GB Plan
+          </div>
+        </div>
+        
+        <!-- Review 2 -->
+        <div class="review-card bg-white p-6 rounded-lg shadow-sm border border-purple-100">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-semibold text-purple-650">Aisha M.</h3>
+              <div class="star-rating text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+            <span class="text-sm text-purple-600">1 week ago</span>
+          </div>
+          <p class="text-purple-600">The process was smooth and the customer service was excellent when I had issues with my payment proof submission.</p>
+          <div class="mt-4 flex items-center text-sm text-purple-500">
+            <i class="fas fa-network-wired mr-2"></i> Airtel 5GB Plan
+          </div>
+        </div>
+        
+        <!-- Review 3 -->
+        <div class="review-card bg-white p-6 rounded-lg shadow-sm border border-purple-100">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-semibold text-purple-650">Tunde B.</h3>
+              <div class="star-rating text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+            </div>
+            <span class="text-sm text-purple-600">2 weeks ago</span>
+          </div>
+          <p class="text-purple-600">Good service but the verification took longer than expected. Otherwise, the data plan worked perfectly once activated.</p>
+          <div class="mt-4 flex items-center text-sm text-purple-500">
+            <i class="fas fa-network-wired mr-2"></i> Glo 15GB Plan
+          </div>
+        </div>
+        
+        <!-- Review 4 -->
+        <div class="review-card bg-white p-6 rounded-lg shadow-sm border border-purple-100">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-semibold text-purple-650">Jennifer K.</h3>
+              <div class="star-rating text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+            <span class="text-sm text-purple-600">3 weeks ago</span>
+          </div>
+          <p class="text-purple-600">I've used this service multiple times and it's always reliable. The payment proof system makes everything transparent.</p>
+          <div class="mt-4 flex items-center text-sm text-purple-500">
+            <i class="fas fa-network-wired mr-2"></i> 9mobile 3GB Plan
+          </div>
+        </div>
+      </div>
+      
+      <!-- Review Form -->
+      <div class="bg-purple-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold text-purple-650 mb-4">Share Your Experience</h3>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-purple-650 mb-1">Your Name</label>
+          <input type="text" class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Enter your name">
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-purple-650 mb-1">Rate Your Experience</label>
+          <div class="flex space-x-1 text-2xl">
+            <i class="far fa-star star-rating cursor-pointer" data-rating="1"></i>
+            <i class="far fa-star star-rating cursor-pointer" data-rating="2"></i>
+            <i class="far fa-star star-rating cursor-pointer" data-rating="3"></i>
+            <i class="far fa-star star-rating cursor-pointer" data-rating="4"></i>
+            <i class="far fa-star star-rating cursor-pointer" data-rating="5"></i>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-purple-650 mb-1">Your Review</label>
+          <textarea class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" rows="4" placeholder="Share your experience..."></textarea>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-purple-650 mb-1">Network & Plan</label>
+          <select class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350">
+            <option value="">Select your plan</option>
+            <option value="Airtel">Airtel</option>
+            <option value="MTN">MTN</option>
+            <option value="Glo">Glo</option>
+            <option value="9mobile">9mobile</option>
+          </select>
+        </div>
+        
+        <button class="bg-purple-650 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all">
+          <i class="fas fa-paper-plane mr-2"></i> Submit Review
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Setup tab switching
+      document.getElementById('proof-tab').addEventListener('click', () => switchTab('proof'));
+      document.getElementById('reviews-tab').addEventListener('click', () => switchTab('reviews'));
+      
+      // Setup star rating
+      const stars = document.querySelectorAll('.star-rating.cursor-pointer');
+      stars.forEach(star => {
+        star.addEventListener('click', function() {
+          const rating = this.getAttribute('data-rating');
+          setRating(stars, rating);
+        });
+        
+        star.addEventListener('mouseover', function() {
+          const rating = this.getAttribute('data-rating');
+          highlightStars(stars, rating);
+        });
+      });
+      
+      document.querySelector('.star-rating.cursor-pointer').addEventListener('mouseout', function() {
+        resetStars(stars);
+      });
+    });
+
+    function switchTab(tab) {
+      if (tab === 'proof') {
+        document.getElementById('proof-tab').classList.add('active');
+        document.getElementById('reviews-tab').classList.remove('active');
+        document.getElementById('proof-section').classList.remove('hidden');
+        document.getElementById('reviews-section').classList.add('hidden');
+      } else {
+        document.getElementById('reviews-tab').classList.add('active');
+        document.getElementById('proof-tab').classList.remove('active');
+        document.getElementById('reviews-section').classList.remove('hidden');
+        document.getElementById('proof-section').classList.add('hidden');
+      }
+    }
+
+    function setRating(stars, rating) {
+      stars.forEach(star => {
+        const starRating = star.getAttribute('data-rating');
+        if (starRating <= rating) {
+          star.classList.remove('far');
+          star.classList.add('fas');
+        } else {
+          star.classList.remove('fas');
+          star.classList.add('far');
+        }
+      });
+    }
+
+    function highlightStars(stars, rating) {
+      stars.forEach(star => {
+        const starRating = star.getAttribute('data-rating');
+        if (starRating <= rating) {
+          star.classList.remove('far');
+          star.classList.add('fas');
+        }
+      });
+    }
+
+    function resetStars(stars) {
+      // Check if any star is selected
+      let hasSelection = false;
+      stars.forEach(star => {
+        if (star.classList.contains('fas')) {
+          hasSelection = true;
+        }
+      });
+      
+      // If no selection, reset to all empty stars
+      if (!hasSelection) {
+        stars.forEach(star => {
+          star.classList.remove('fas');
+          star.classList.add('far');
+        });
+      }
+    }
+
+    function showNotification(message, type) {
+      const notification = document.getElementById('notification');
+      const notificationText = document.getElementById('notification-text');
+      
+      notificationText.textContent = message;
+      notification.className = `notification ${type} show`;
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+            </html>
