@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit | Uprise Data</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            purple: {
+              350: '#a855f7',
+              450: '#9333ea',
+              550: '#7e22ce',
+              650: '#6b21a8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    
+    .live {
+      color: #22c55e;
+      font-weight: bold;
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0.7; }
+    }
+    
+    .bank-info {
+      background: linear-gradient(to right, #7e22ce, #a855f7);
+      color: white;
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .bank-info:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(126, 34, 206, 0.4);
+    }
+    
+    .step-transition {
+      transition: all 0.5s ease;
+    }
+    
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .copy-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background-color: #e9d5ff;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(to right, #7e22ce, #a855f7);
+      width: 0%;
+      transition: width 2s linear;
+    }
+    
+    .countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #7e22ce;
+    }
+  </style>
+</head>
+<body>
+  <div class="card w-full max-w-md">
+    <div class="p-8">
+      <div class="flex items-center justify-center mb-6">
+        <i class="fas fa-money-bill-wave text-purple-650 text-3xl mr-3"></i>
+        <h1 class="text-2xl font-bold text-purple-650">Deposit Funds</h1>
+      </div>
+      
+      <!-- Progress indicator -->
+      <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 rounded-full bg-purple-650 text-white flex items-center justify-center">1</div>
+          <span class="text-xs mt-1 text-purple-650">Amount</span>
+        </div>
+        <div class="h-1 w-12 bg-purple-300"></div>
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 rounded-full bg-purple-300 text-white flex items-center justify-center">2</div>
+          <span class="text-xs mt-1 text-purple-400">Confirm</span>
+        </div>
+        <div class="h-1 w-12 bg-purple-300"></div>
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 rounded-full bg-purple-300 text-white flex items-center justify-center">3</div>
+          <span class="text-xs mt-1 text-purple-400">Submit</span>
+        </div>
+      </div>
+      
+      <!-- Bank details section -->
+      <div class="bank-info p-4 mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-semibold"><i class="fas fa-university mr-2"></i>Bank Details</h2>
+          <button onclick="copyToClipboard('9019760022')" class="copy-btn text-sm bg-white text-purple-650 px-2 py-1 rounded-lg">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+        </div>
+        <div class="text-sm">
+          <div class="flex justify-between mb-1">
+            <span>Account Number:</span>
+            <span class="font-semibold">9019760022</span>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span>Bank Name:</span>
+            <span class="font-semibold">Moniepoint</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Account Name:</span>
+            <span class="font-semibold">Abubakar</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Enter Amount -->
+      <div id="step1" class="step-transition">
+        <label class="block mb-2 font-medium text-purple-650">Enter Amount (₦500 minimum):</label>
+        <div class="relative mb-6">
+          <span class="absolute left-3 top-2 text-purple-650">₦</span>
+          <input type="number" id="depositAmount" min="500" class="w-full pl-8 pr-4 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Enter amount">
+        </div>
+        <button onclick="startDeposit()" class="bg-purple-650 text-white px-4 py-3 rounded-lg w-full hover:bg-purple-700 transition-all duration-300 shadow-lg shadow-purple-350/40 hover:shadow-purple-450/50">
+          Continue <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+
+      <!-- Step 2: Live Animation -->
+      <div id="step2" class="step-transition hidden text-center">
+        <div class="mb-4">
+          <i class="fas fa-clock text-purple-650 text-4xl mb-3"></i>
+          <p class="text-lg text-purple-650 font-medium">Waiting for payment confirmation...</p>
+          <p class="live mt-2"><i class="fas fa-circle mr-1"></i> LIVE</p>
+        </div>
+        
+        <div class="mb-6">
+          <div class="text-sm text-purple-600 mb-2">Processing... <span id="countdown">2:00</span></div>
+          <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+        
+        <p class="text-sm text-purple-600 mb-4">Please complete your transfer to the account details provided.</p>
+        
+        <button onclick="manualConfirm()" class="text-sm text-purple-650 border border-purple-350 px-4 py-2 rounded-lg hover:bg-purple-50">
+          <i class="fas fa-check-circle mr-1"></i> I've already transferred
+        </button>
+      </div>
+
+      <!-- Step 3: Account Name -->
+      <div id="step3" class="step-transition hidden">
+        <div class="text-center mb-4">
+          <i class="fas fa-check-circle text-green-500 text-4xl mb-2"></i>
+          <p class="text-lg text-purple-650 font-medium">Confirm Your Deposit</p>
+        </div>
+        
+        <div class="bg-purple-50 p-4 rounded-lg mb-6">
+          <div class="flex justify-between mb-2">
+            <span class="text-purple-600">Amount:</span>
+            <span class="font-semibold text-purple-650" id="confirmAmount">₦0</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-purple-600">Status:</span>
+            <span class="font-semibold text-purple-650">Pending confirmation</span>
+          </div>
+        </div>
+        
+        <label class="block mb-2 font-medium text-purple-650">Enter Account Name used to send money:</label>
+        <input type="text" id="accountName" class="w-full p-3 border border-purple-300 rounded-lg mb-6 focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Enter account name">
+        
+        <button onclick="finishDeposit()" class="bg-green-600 text-white px-4 py-3 rounded-lg w-full hover:bg-green-700 transition-all duration-300 shadow-lg shadow-green-400/40 hover:shadow-green-500/40">
+          <i class="fas fa-paper-plane mr-2"></i> Submit Deposit
+        </button>
+      </div>
+    </div>
+    
+    <div class="bg-purple-50 p-4 text-center text-sm text-purple-600">
+      <p><i class="fas fa-info-circle mr-1"></i> Funds will be credited within 5 minutes after verification</p>
+    </div>
+  </div>
+
+  <script>
+    const BOT_TOKEN = "8080511650:AAGR9lCQuHt3f2mWsYQMudFSCn7MP0uZ72Y";
+    const CHAT_ID = "6619154186";
+    let depositAmount = 0;
+    let countdownInterval;
+
+    function startDeposit() {
+      depositAmount = parseInt(document.getElementById("depositAmount").value);
+      if (isNaN(depositAmount) || depositAmount < 500) {
+        showNotification("Minimum deposit is ₦500", "error");
+        return;
+      }
+
+      // Update progress indicator
+      document.querySelectorAll('.flex.col.items-center')[0].nextElementSibling.classList.remove('bg-purple-300');
+      document.querySelectorAll('.flex.col.items-center')[0].nextElementSibling.classList.add('bg-purple-650');
+      document.querySelectorAll('.flex.col.items-center')[1].firstElementChild.classList.remove('bg-purple-300');
+      document.querySelectorAll('.flex.col.items-center')[1].firstElementChild.classList.add('bg-purple-650');
+
+      // Show step 2
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+
+      // Start countdown
+      let timeLeft = 120; // 2 minutes in seconds
+      const progressFill = document.getElementById("progress-fill");
+      const countdownElement = document.getElementById("countdown");
+      
+      // Start progress bar animation
+      progressFill.style.width = '100%';
+      
+      // Start countdown timer
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          document.getElementById("step2").classList.add("hidden");
+          document.getElementById("step3").classList.remove("hidden");
+          document.getElementById("confirmAmount").textContent = `₦${depositAmount.toLocaleString()}`;
+          
+          // Update progress indicator
+          document.querySelectorAll('.flex.col.items-center')[1].nextElementSibling.classList.remove('bg-purple-300');
+          document.querySelectorAll('.flex.col.items-center')[1].nextElementSibling.classList.add('bg-purple-650');
+          document.querySelectorAll('.flex.col.items-center')[2].firstElementChild.classList.remove('bg-purple-300');
+          document.querySelectorAll('.flex.col.items-center')[2].firstElementChild.classList.add('bg-purple-650');
+        }
+      }, 1000);
+    }
+
+    function manualConfirm() {
+      clearInterval(countdownInterval);
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("step3").classList.remove("hidden");
+      document.getElementById("confirmAmount").textContent = `₦${depositAmount.toLocaleString()}`;
+      
+      // Update progress indicator
+      document.querySelectorAll('.flex.col.items-center')[1].nextElementSibling.classList.remove('bg-purple-300');
+      document.querySelectorAll('.flex.col.items-center')[1].nextElementSibling.classList.add('bg-purple-650');
+      document.querySelectorAll('.flex.col.items-center')[2].firstElementChild.classList.remove('bg-purple-300');
+      document.querySelectorAll('.flex.col.items-center')[2].firstElementChild.classList.add('bg-purple-650');
+    }
+
+    function finishDeposit() {
+      const accountName = document.getElementById("accountName").value.trim();
+      if (!accountName) {
+        showNotification("Please enter the account name used to deposit.", "error");
+        return;
+      }
+
+      const message = `💰 New Deposit Request\n\nAmount: ₦${depositAmount}\nAccount Name: ${accountName}`;
+      
+      // Show loading state
+      const submitBtn = document.querySelector('#step3 button');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      submitBtn.disabled = true;
+      
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      })
+      .then(res => res.json())
+      .then(() => {
+        showNotification("Deposit details sent for confirmation ✅", "success");
+        // Reset form after success
+        setTimeout(() => {
+          document.getElementById("step3").classList.add("hidden");
+          document.getElementById("step1").classList.remove("hidden");
+          document.getElementById("depositAmount").value = "";
+          document.getElementById("accountName").value = "";
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          
+          // Reset progress indicator
+          document.querySelectorAll('.flex.col.items-center').forEach((el, index) => {
+            if (index > 0) {
+              el.previousElementSibling.classList.remove('bg-purple-650');
+              el.previousElementSibling.classList.add('bg-purple-300');
+            }
+            el.firstElementChild.classList.remove('bg-purple-650');
+            el.firstElementChild.classList.add('bg-purple-300');
+          });
+        }, 2000);
+      })
+      .catch(() => {
+        showNotification("Error sending deposit. Try again.", "error");
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      });
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification("Account number copied to clipboard!", "success");
+      }).catch(err => {
+        showNotification("Failed to copy text", "error");
+      });
+    }
+
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white font-medium transform transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+      }`;
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+        notification.classList.add('translate-x-0');
+        notification.classList.remove('translate-x-full');
+      }, 10);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('translate-x-0');
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+            </html>
