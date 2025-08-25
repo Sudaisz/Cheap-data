@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uprise Data | Deposit & Auth</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            purple: {
+              350: '#a855f7',
+              450: '#9333ea',
+              550: '#7e22ce',
+              650: '#6b21a8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      width: 100%;
+      max-width: 420px;
+    }
+    
+    .auth-tab {
+      cursor: pointer;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-tab.active {
+      border-bottom: 3px solid #7e22ce;
+      color: #7e22ce;
+      font-weight: 600;
+    }
+    
+    .bank-info {
+      background: linear-gradient(to right, #7e22ce, #a855f7);
+      color: white;
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .bank-info:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(126, 34, 206, 0.4);
+    }
+    
+    .step-transition {
+      transition: all 0.5s ease;
+    }
+    
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .copy-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background-color: #e9d5ff;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(to right, #7e22ce, #a855f7);
+      width: 0%;
+      transition: width 2s linear;
+    }
+    
+    .amount-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .amount-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background-color: #10b981;
+    }
+    
+    .notification.error {
+      background-color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Notification -->
+  <div id="notification" class="notification hidden">
+    <i class="fas fa-check-circle mr-2"></i>
+    <span id="notification-text"></span>
+  </div>
+
+  <!-- Auth Card -->
+  <div id="auth-card" class="card">
+    <!-- Tabs -->
+    <div class="flex border-b">
+      <div class="auth-tab active w-1/2" id="login-tab">Login</div>
+      <div class="auth-tab w-1/2" id="signup-tab">Sign Up</div>
+    </div>
+    
+    <!-- Login Form -->
+    <div id="login-form" class="p-8">
+      <h2 class="text-2xl font-bold text-purple-650 mb-6 text-center">Welcome Back</h2>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Phone Number</label>
+        <div class="flex">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-purple-300 bg-purple-100 text-purple-700 text-sm">
+            +234
+          </span>
+          <input type="tel" id="login-phone" class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border-purple-300 border focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="8012345678">
+        </div>
+      </div>
+      
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Password</label>
+        <input type="password" id="login-password" class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Enter your password">
+      </div>
+      
+      <button onclick="login()" class="bg-purple-650 text-white px-4 py-3 rounded-lg w-full hover:bg-purple-700 transition-all duration-300 shadow-lg shadow-purple-350/40 hover:shadow-purple-450/50">
+        Login <i class="fas fa-sign-in-alt ml-2"></i>
+      </button>
+    </div>
+    
+    <!-- Signup Form -->
+    <div id="signup-form" class="p-8 hidden">
+      <h2 class="text-2xl font-bold text-purple-650 mb-6 text-center">Create Account</h2>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Full Name</label>
+        <input type="text" id="signup-name" class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Enter your full name">
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Phone Number</label>
+        <div class="flex">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-purple-300 bg-purple-100 text-purple-700 text-sm">
+            +234
+          </span>
+          <input type="tel" id="signup-phone" class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border-purple-300 border focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="8012345678">
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Password</label>
+        <input type="password" id="signup-password" class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Create a password">
+      </div>
+      
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-purple-650 mb-1">Confirm Password</label>
+        <input type="password" id="signup-confirm" class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-350 focus:border-purple-350" placeholder="Confirm your password">
+      </div>
+      
+      <button onclick="signup()" class="bg-purple-650 text-white px-4 py-3 rounded-lg w-full hover:bg-purple-700 transition-all duration-300 shadow-lg shadow-purple-350/40 hover:shadow-purple-450/50">
+        Create Account <i class="fas fa-user-plus ml-2"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Deposit Card (initially hidden) -->
+  <div id="deposit-card" class="card hidden">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-xl font-bold text-purple-650"><i class="fas fa-money-bill-wave mr-2"></i>Deposit Funds</h1>
+        <div class="flex items-center">
+          <span class="text-sm text-purple-600 mr-2" id="user-phone"></span>
+          <button onclick="logout()" class="text-sm text-purple-600 hover:text-purple-800">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-purple-650 font-medium">Your Balance:</span>
+        <span class="text-lg font-bold text-purple-650" id="user-balance">₦0.00</span>
+      </div>
+      
+      <!-- Bank details section -->
+      <div class="bank-info p-4 mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-semibold"><i class="fas fa-university mr-2"></i>Bank Details</h2>
+          <button onclick="copyToClipboard('9019760022')" class="copy-btn text-sm bg-white text-purple-650 px-2 py-1 rounded-lg">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+        </div>
+        <div class="text-sm">
+          <div class="flex justify-between mb-1">
+            <span>Account Number:</span>
+            <span class="font-semibold">9019760022</span>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span>Bank Name:</span>
+            <span class="font-semibold">Moniepoint</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Account Name:</span>
+            <span class="font-semibold">Abubakar</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Amount Selection -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-650 mb-2">Quick Select Amount:</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button class="amount-btn bg-purple-100 text-purple-650 py-2 rounded-lg hover:bg-purple-200" onclick="setAmount(500)">₦500</button>
+          <button class="amount-btn bg-purple-100 text-purple-650 py-2 rounded-lg hover:bg-purple-200" onclick="setAmount(1000)">₦1000</button>
+          <button class="amount-btn bg-purple-100 text-purple-650 py-2 rounded-lg hover:bg-purple-200" onclick="setAmount(2000)">₦2000</button>
